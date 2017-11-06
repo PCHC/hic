@@ -2,6 +2,16 @@
   "name": "hic",
   "version": "0.1.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pchc/hic.git"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "android 4",
+    "opera 12",
+    "IE 10"
+  ],
   "dependencies": {
     "bootstrap": "^4.0.0-beta.2",
     "flux": "^3.1.3",
