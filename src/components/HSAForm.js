@@ -31,10 +31,7 @@ export default class HSAForm extends React.Component {
 
   render() {
     return(
-      <div>
-        <hr />
-        <HSARange maxContribution={this.props.maxContribution} maxAnnualContribution={this.props.maxAnnualContribution} catchup={this.props.catchup} onHSARangeChange={this.handleHSARangeChange} />
-      </div>
+      <HSARange maxContribution={this.props.maxContribution} maxAnnualContribution={this.props.maxAnnualContribution} catchup={this.props.catchup} onHSARangeChange={this.handleHSARangeChange} />
     )
   }
 }

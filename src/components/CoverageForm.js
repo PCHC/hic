@@ -53,10 +53,11 @@ export default class CoverageForm extends React.Component {
   render() {
     return(
       <div className="form-group">
-        Coverage:
+        <h4><label>Health Insurance Coverage:</label></h4>
         <Coverage name="employee" checked={true} disabled={true} onCoverageChange={this.handleCoverageChange}>Employee</Coverage>
         <Coverage name="spouse" onCoverageChange={this.handleCoverageChange}>Spouse</Coverage>
         <Coverage name="children" onCoverageChange={this.handleCoverageChange}>Children</Coverage>
+        <hr />
       </div>
     )
   }

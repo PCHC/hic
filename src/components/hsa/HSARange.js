@@ -23,11 +23,7 @@ export default class HSARange extends React.Component {
 
     return(
       <div className="form-group">
-        <label>Biweekly HSA Contribution</label>
-        <small className="form-text text-muted">
-          Maximum annual contribution of ${this.props.maxAnnualContribution}.<br/>
-          Annual catch-up contribution of ${this.props.catchup} for employees over 55.
-        </small>
+        <h4><label>Biweekly HSA Contribution:</label></h4>
         <div className="row">
           <div className="col-auto">
             ${contribution}
@@ -36,6 +32,11 @@ export default class HSARange extends React.Component {
             <input className="form-control" type="range" min="0" max={this.props.maxContribution} step="1" value={contribution} onChange={this.handleRangeChange} />
           </div>
         </div>
+        <small className="form-text text-muted">
+          Maximum annual contribution of ${this.props.maxAnnualContribution}.<br/>
+          Annual catch-up contribution of ${this.props.catchup} for employees over 55.
+        </small>
+        <hr />
       </div>
     );
   }

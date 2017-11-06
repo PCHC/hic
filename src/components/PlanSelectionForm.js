@@ -59,13 +59,15 @@ export default class PlanSelectionForm extends React.Component {
 
     return(
       <div>
-        <Selector name="plan" title="Insurance Plan" onSelectChange={this.handleSelectChange}>
-          {PlanSelectComponents}
-        </Selector>
         <Selector name="status" title="Employment Status" onSelectChange={this.handleSelectChange}>
-          <option value="fullTime">Full Time</option>
-          <option value="partTime">Part Time</option>
+          <option value="fullTime">Full-Time (40 hours per week) or Part-Time (30–39 hours per week)</option>
+          <option value="partTime">Part Time (20–29 hours per week)</option>
         </Selector>
+        {this.state.selections.status ?
+          <Selector name="plan" title="Health Insurance Plan" onSelectChange={this.handleSelectChange}>
+            {PlanSelectComponents}
+          </Selector>
+        : null }
       </div>
     );
   }
