@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
 
 // Layout wrapper
 import Layout from './pages/Layout';
@@ -13,9 +12,7 @@ class App extends Component {
   render() {
     return (
       <Layout>
-        <Switch>
-          <Route exact path='/' component={CalcPage}/>
-        </Switch>
+        <CalcPage/>
       </Layout>
     );
   }
