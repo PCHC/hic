@@ -16,8 +16,8 @@ export default class CalcPage extends React.Component {
     this.setCosts = this.setCosts.bind(this);
     //this.setCoverage = this.setCoverage.bind(this);
     this.zeroCosts = this.zeroCosts.bind(this);
-    this.doCalc = this.doCalc.bind(this);
-    this.doInsuranceCalc = this.doInsuranceCalc.bind(this);
+    //this.doCalc = this.doCalc.bind(this);
+    //this.doInsuranceCalc = this.doInsuranceCalc.bind(this);
     //this.setHSAContributions = this.setHSAContributions.bind(this);
 
     this.handlePlanSelectionFormChange = this.handlePlanSelectionFormChange.bind(this);
@@ -120,7 +120,7 @@ export default class CalcPage extends React.Component {
   }
 
   zeroHSA() {
-    const {state, totals} = this.state;
+    const {state} = this.state;
 
     this.setState({
       ...state,
@@ -182,31 +182,6 @@ export default class CalcPage extends React.Component {
     })
   }
 
-  doInsuranceCalc() {
-    const {state, selections, costs, totals} = this.state;
-
-    var insuranceTotal = 0;
-
-    insuranceTotal += selections.coverage.employee ? costs.employee : 0;
-    insuranceTotal += selections.coverage.spouse ? costs.spouse : 0;
-    insuranceTotal += selections.coverage.children ? costs.children : 0;
-
-    insuranceTotal += (selections.coverage.spouse && selections.coverage.children) ? costs.family : 0;
-
-    this.setState({
-      ...state,
-      totals: {
-        ...totals,
-        insurance: insuranceTotal
-      }
-    })
-  }
-
-  doCalc() {
-    this.doInsuranceCalc();
-    //this.setHSAContributions();
-  }
-
   findPlan(key) {
     const plans = this.plans;
     return plans.find(function(plan) {
@@ -218,6 +193,14 @@ export default class CalcPage extends React.Component {
     const {state, selections, totals} = this.state;
 
     if(!selections.plan || !selections.status) {
+      this.setState({
+        ...state,
+        totals: {
+          insurance: 0,
+          employeeHSA: 0,
+          employerHSA: 0,
+        }
+      });
       return;
     }
 
@@ -237,6 +220,8 @@ export default class CalcPage extends React.Component {
       totals: {
         ...totals,
         insurance: insuranceTotal,
+        employeeHSA: selections.isHSA ? totals.employeeHSA : 0,
+        employerHSA: selections.isHSA ? totals.employerHSA : 0,
       }
     })
   }
@@ -247,17 +232,23 @@ export default class CalcPage extends React.Component {
 
     return(
       <div>
-        <h1>Calc</h1>
+        <h1>2018 PCHC Health Insurance Cost Calculator</h1>
+        <p className="lead font-weight-light">This tool is designed to help you quickly estimate your health insurance costs per paycheck.<br/>
+        While we strive to keep this information accurate, please see the Employee Benefits Guide for the most up-to-date information.</p>
         <div className="row">
           <div className="col-6">
             <PlanSelectionForm plans={plans} onPlanSelectionFormChange={this.handlePlanSelectionFormChange} />
-            <hr />
-            <CoverageForm onCoverageChange={this.handleCoverageFormChange} />
+
+            { this.state.selections.status && this.state.selections.plan ?
+              <CoverageForm onCoverageChange={this.handleCoverageFormChange} />
+            : null }
+
             { this.state.selections.isHSA ?
               <HSAForm selections={this.state.selections} plans={plans} onHSAFormChange={this.handleHSAFormChange} maxContribution={
                 Math.round((this.state.hsa.employeeMax + this.state.hsa.catchup)/26*100)/100
               } maxAnnualContribution={this.state.hsa.employeeMax} catchup={this.state.hsa.catchup} />
             : null }
+
           </div>
           <div className="col">
             <Total title="Biweekly Grand Total" alertType="alert alert-success" price={totals.insurance + totals.employeeHSA}>
@@ -270,13 +261,13 @@ export default class CalcPage extends React.Component {
             { this.state.selections.isHSA ?
               <div className="hsa-totals">
                 <div className="row">
-                  <div className="col">
+                  <div className="col d-flex align-items-stretch">
                     <Total title="Biweekly Employee HSA Contribution" alertType="alert alert-danger" price={totals.employeeHSA}>
                       Amount contributed by the employee per pay period.<br/>
                       <small>Maximum annual contribution of ${this.state.hsa.employeeMax}</small>
                     </Total>
                   </div>
-                  <div className="col">
+                  <div className="col d-flex align-items-stretch">
                     <Total title="Annual Employee HSA Contribution" alertType="alert alert-danger" price={totals.employeeHSA*26}>
                       Amount contributed by the employee per year.<br/>
                       <small>Maximum annual contribution of ${this.state.hsa.employeeMax}.<br/>
@@ -286,13 +277,13 @@ export default class CalcPage extends React.Component {
                 </div>
 
                 <div className="row">
-                  <div className="col">
-                    <Total title="Biweekly PCHC HSA Contribution" alertType="alert alert-info" price={Math.round(hsa.employer/26*100)/100}>
+                  <div className="col d-flex align-items-stretch">
+                    <Total title="Biweekly PCHC HSA Contribution" alertType="alert alert-warning" price={Math.round(hsa.employer/26*100)/100}>
                       Estimated average amount contributed by PCHC per pay period.
                     </Total>
                   </div>
-                  <div className="col">
-                    <Total title="Annual PCHC HSA Contribution" alertType="alert alert-info" price={hsa.employer}>
+                  <div className="col d-flex align-items-stretch">
+                    <Total title="Annual PCHC HSA Contribution" alertType="alert alert-warning" price={hsa.employer}>
                       Amount contributed by PCHC per pay year.
                     </Total>
                   </div>

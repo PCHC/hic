@@ -5,10 +5,26 @@ export default class Selector extends React.Component {
     super();
 
     this.handleSelectChange = this.handleSelectChange.bind(this);
+    this.resetForm = this.resetForm.bind(this);
 
     this.state = {
       selectValue: ''
     }
+  }
+
+  resetForm () {
+    this.setState({
+      selectValue: ''
+    });
+    this.props.onSelectChange({name: this.props.name, value: ''});
+  }
+
+  componentWillMount() {
+    this.resetForm();
+  }
+
+  componentWillUnmount() {
+    this.resetForm();
   }
 
   handleSelectChange(e) {
@@ -21,11 +37,12 @@ export default class Selector extends React.Component {
   render() {
     return(
       <div className="form-group">
-        <label>Select {this.props.title}</label>
+        <h4><label>Select {this.props.title}</label></h4>
         <select className="form-control" name={this.props.name} placeholder={this.props.title} onChange={this.handleSelectChange}>
-          <option value="">---</option>
+          <option value="">Choose...</option>
           {this.props.children}
         </select>
+        <hr />
       </div>
     );
   }
