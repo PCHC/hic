@@ -6,6 +6,7 @@
     "type": "git",
     "url": "git://github.com/pchc/hic.git"
   },
+  "homepage" : "https://pchc.github.io/hic",
   "browserslist": [
     "last 2 versions",
     "android 4",
